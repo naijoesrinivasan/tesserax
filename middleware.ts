@@ -4,8 +4,11 @@ const isPublicRoute = createRouteMatcher(['/api/webhook/clerk', '/signIn(.*)', '
 const isIgnoredRoute = createRouteMatcher(['/api/webhook/clerk']);
 
 export default clerkMiddleware(async (auth, req) => {
-  if (!isPublicRoute(req)) 
+  console.log("Middleware request: ", req)
+  if (!isPublicRoute(req))  {
+    console.log("Unauthorized path. Protecting route...")
     await auth.protect();
+  }
 });
 
 export const config = {
