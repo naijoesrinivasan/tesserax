@@ -1,8 +1,10 @@
+import React from "react";
+import type { Metadata } from "next";
 import { ClerkProvider } from "@clerk/nextjs"
 import { Inter } from 'next/font/google'
 import '../globals.css'
 
-export const metadata = {
+export const metadata: Metadata = {
   title: 'Tesserax',
   description: 'A Next.js 13 Threads Application'
 }
