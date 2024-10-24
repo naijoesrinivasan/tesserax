@@ -29,39 +29,43 @@ export async function createThread({ text, author, communityId, path}: Params)  
 }
 
 export async function fetchThreads(pageNumber = 1, pageSize = 20) {
-  connectToDB();
+  try {
+    connectToDB();
   
-  // calculate number of posts to skip 
-  const skipAmount = (pageNumber - 1) * pageSize; 
+    // calculate number of posts to skip 
+    const skipAmount = (pageNumber - 1) * pageSize; 
 
-  // fetch posts that have no parents (top-level threads)
-  const threadsQuery = Thread.find({ parentId: { $in: [null, undefined]}})
-                             .sort({ createdAt: 'desc' })
-                             .skip(skipAmount)
-                             .limit(pageSize)
-                             .populate({ path: 'author', model: User })
-                             .populate({
-                                path: "children", // Populate the children field
-                                populate: {
-                                  path: "author", // Populate the author field within children
-                                  model: User,
-                                  select: "_id name parentId image", // Select only _id and username fields of the author
-                                },
-                              });
+    // fetch posts that have no parents (top-level threads)
+    const threadsQuery = Thread.find({ parentId: { $in: [null, undefined]}})
+                               .sort({ createdAt: 'desc' })
+                               .skip(skipAmount)
+                               .limit(pageSize)
+                               .populate({ path: 'author', model: User })
+                               .populate({
+                                  path: "children", // Populate the children field
+                                  populate: {
+                                    path: "author", // Populate the author field within children
+                                    model: User,
+                                    select: "_id name parentId image", // Select only _id and username fields of the author
+                                  },
+                                });
 
-  const totalThreadsCount = await Thread.countDocuments({ parentId: { $in: [null, undefined]}});
+    const totalThreadsCount = await Thread.countDocuments({ parentId: { $in: [null, undefined]}});
 
-  const threads = await threadsQuery.exec();
+    const threads = await threadsQuery.exec();
 
-  const isNext = totalThreadsCount > skipAmount + threads.length;
+    const isNext = totalThreadsCount > skipAmount + threads.length;
 
-  return { threads, isNext }
+    return { threads, isNext }
+  } catch (error: any) {
+    throw new Error(`Error fetching all threads: ${error.message}`)
+  }
 }
 
 export async function fetchThreadById(id: string)  {
-  connectToDB();
-
   try {
+    connectToDB();
+    
     const thread = await Thread.findById(id)
         .populate({
            path: 'author',
