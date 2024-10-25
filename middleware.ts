@@ -1,12 +1,11 @@
 import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 
-const isPublicRoute = createRouteMatcher(['/api/webhook/clerk', '/signIn(.*)', '/signUp(.*)']);
-const isIgnoredRoute = createRouteMatcher(['/api/webhook/clerk']);
+const isPublicRoute = createRouteMatcher(['/api/uploadthing', '/api/webhook/clerk', '/signIn(.*)', '/signUp(.*)']);
 
 export default clerkMiddleware(async (auth, req) => {
-  console.log("Middleware request: ", req)
+  // console.log("Middleware request: ", req)
   if (!isPublicRoute(req))  {
-    console.log("Unauthorized path. Protecting route...")
+    // console.log("Unauthorized path. Protecting route...")
     await auth.protect();
   }
 });
