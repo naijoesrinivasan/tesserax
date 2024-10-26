@@ -70,12 +70,13 @@ const AccountProfile = ({ user, btnTitle }: Props) => {
 
     const hasImageChanged = isBase64Image(blob);
     if (hasImageChanged) {
-    const imgRes = await startUpload(files)
-    if (imgRes && imgRes[0].url) {
-      console.log("Image response: ", imgRes, "\nNew photo: ", imgRes[0].url)
-      values.profile_photo = imgRes[0].url;
+      const imgRes = await startUpload(files)
+      if (imgRes && imgRes[0].url) {
+        console.log("Image response: ", imgRes, "\nNew photo: ", imgRes[0].url)
+        values.profile_photo = imgRes[0].url;
+      }
     }
-    }
+    
     console.log("Submitting values: ", values)
     await updateUser({
       name: values.name,

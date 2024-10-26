@@ -8,10 +8,11 @@ export default function Topbar()  {
     <nav className="topbar">
       <Link href='/' className="flex items-center gap-4">
         <Image 
-          src="/assets/logo.svg" 
+          src="/assets/tesserax-logo.png" 
           alt="logo" 
-          width={28} 
-          height={28}
+          width={32} 
+          height={32}
+          className="rounded-full"
         />
         <p className="text-heading3-bold text-light-1 max-xs:hidden">Tesserax</p>
       </Link>
